@@ -24,6 +24,8 @@ function App() {
           const currentPoints = [...points, point];
           setPoints((prevPoints) => [...prevPoints, point]);
           if (currentPoints.length < 2) return;
+          // if running program on github codespaces then make port public from below terminal ( port ) option and use the link given there that looks like this :
+          // https://supreme-garbanzo-pvxpxj7jpf996g-5000.app.github.dev/bestfitline
           fetch("http://127.0.0.1:5000/bestfitline", {
             method: "POST",
             headers: {
