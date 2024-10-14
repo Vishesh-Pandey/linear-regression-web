@@ -6,7 +6,7 @@ function App() {
   const [coeff, setCoeff] = useState<number[]>([]);
   const [intercept, setIntercept] = useState<number>(0);
 
-  const handleNewDataPoint = (e) => {
+  const handleNewDataPoint = (e: React.MouseEvent<HTMLDivElement>) => {
     const point = {
       x: e.clientX,
       y: e.clientY,
@@ -16,6 +16,7 @@ function App() {
     if (currentPoints.length < 2) return;
     // if running program on github codespaces then make port public from below terminal ( port ) option and use the link given there that looks like this :
     // https://supreme-garbanzo-pvxpxj7jpf996g-5000.app.github.dev/bestfitline
+    // The flask backend is hosted on https://ml-models-backend-flask.vercel.app
     fetch("https://ml-models-backend-flask.vercel.app/bestfitline", {
       method: "POST",
       headers: {
@@ -53,7 +54,7 @@ function App() {
             backgroundColor: "green",
             width: "50%",
           }}
-          onClick={(e) => {
+          onClick={(e: React.MouseEvent<HTMLDivElement>) => {
             handleNewDataPoint(e);
           }}
         >
