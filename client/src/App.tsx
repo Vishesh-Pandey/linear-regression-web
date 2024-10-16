@@ -113,7 +113,73 @@ function App() {
         </div>
 
         <div style={{ width: "50%", backgroundColor: "white" }}>
-          <p>Coef : {coeff}</p> <p>Intercept : {intercept}</p>
+          <p>Coef : {coeff}</p>
+          <p>Intercept : {intercept}</p>
+          <input
+            style={{ width: "100%" }}
+            type="range"
+            min={-10}
+            max={10}
+            step={0.01}
+            value={coeff[0]}
+            onChange={(e) => {
+              const newCoeff = [...coeff];
+              newCoeff[0] = parseFloat(e.target.value);
+              setCoeff(newCoeff);
+            }}
+          />
+          <input
+            style={{ width: "100%" }}
+            type="range"
+            min={-10}
+            max={1000}
+            step={0.1}
+            value={intercept}
+            onChange={(e) => {
+              setIntercept(parseFloat(e.target.value));
+            }}
+          />
+          <button
+            onClick={() => {
+              fetch("https://ml-models-backend-flask.vercel.app/bestfitline", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  data: points.map((point) => [point.x, point.y]),
+                }),
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  setCoeff(data.coeff);
+                  setIntercept(data.intercept);
+                })
+                .catch((err) => console.error(err));
+            }}
+          >
+            Best Fit Line
+          </button>
+          <button
+            onClick={() => {
+              setPoints([]);
+              setCoeff([]);
+              setIntercept(0);
+            }}
+          >
+            Reset graph
+          </button>
+
+          <p>
+            Mean Squared Error :{" "}
+            {(
+              points.reduce((acc, point) => {
+                const lineY = coeff[0] * point.x + intercept;
+                const error = Math.pow(lineY - point.y, 2);
+                return acc + error;
+              }, 0) / points.length
+            ).toFixed(2)}
+          </p>
         </div>
       </div>
     </>
